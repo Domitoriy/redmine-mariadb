@@ -1,0 +1,64 @@
+version: '2'
+services:
+  web:
+    image: 'redmine:passenger'
+    container_name: 'redmine_web'
+    restart: always
+    ports:
+      - '3000:3000'
+    #links:
+    #  - mysql
+   # networks:
+   #   app_net:
+    #    ipv4_address: 172.16.28.7
+    environment:
+      #REDMINE_DB_DATABASE: redmine
+     # MYSQL_ENV_MYSQL_DATABASE: redmine
+      MYSQL_PORT_3306_TCP: 3306
+     # MYSQL_ENV_MYSQL_USER: root
+      MYSQL_ENV_MYSQL_ROOT_PASSWORD: secret
+     # MYSQL_ENV_MYSQL_PASSWORD: secret
+    #volumes:
+     # - '/srv/redmine/files/:/usr/src/redmine/files/'
+     # - '/srv/redmine/config/configuration.yml:/usr/src/redmine/config/configuration.yml'
+     # - '/srv/redmine/config/database.yml:/usr/src/redmine/config/database.yml'
+  mysql:
+    image: 'mariadb'
+    container_name: 'mysql_db'
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: redmine
+     #- MYSQL_DATABASE=redmine
+     # MYSQL_DATABASE: redmine
+     #- MYSQL_ROOT_PASSWORD=secret
+     #- MYSQL_PASSWORD=pswd
+     #- MYSQL_USER=redmine
+    #volumes:
+    #  - '/srv/mysql/:/var/lib/mysql'
+    ports:
+      - '3306:3306'
+    #networks:
+    #  app_net:
+     #   ipv4_address: 172.16.28.6
+  nginx:
+    image: nginx
+    restart: always
+    ports:
+    - "80:80"
+   # networks:
+    #  default:
+     #   ipv4_address: 172.16.28.5
+#networks:
+#  app_net:
+   # driver: bridge
+#    ipam:
+#     driver: default
+#     config:
+#       - subnet: 172.28.0.0/16
+#         ip_range: 172.28.5.0/24
+#         gateway: 172.28.5.254
+#         aux_addresses:
+#           host1: 172.28.1.5
+#           host2: 172.28.1.6
+#           host3: 172.28.1.7
